@@ -1,11 +1,22 @@
 import React from 'react';
 import { PaperAirplaneIcon } from './icons/PaperAirplaneIcon';
 import { ChatBubbleIcon } from './icons/ChatBubbleIcon';
+import { ChartBarIcon } from './icons/ChartBarIcon';
+import { DocumentTextIcon } from './icons/DocumentTextIcon';
+import { View } from '../App';
 
-const Navigation: React.FC = () => {
+interface NavigationProps {
+    activeView: View;
+    setActiveView: (view: View) => void;
+}
+
+
+const Navigation: React.FC<NavigationProps> = ({ activeView, setActiveView }) => {
     
     const navItems = [
         { id: 'manpower', label: 'Manpower Calculator', icon: ChatBubbleIcon },
+        { id: 'dashboard', label: 'Activity Dashboard', icon: ChartBarIcon },
+        { id: 'workpack', label: 'Work Pack Evaluator', icon: DocumentTextIcon },
     ];
 
     return (
@@ -20,7 +31,12 @@ const Navigation: React.FC = () => {
                 {navItems.map(item => (
                     <li key={item.id}>
                         <button 
-                            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left font-semibold transition-colors bg-blue-50 text-blue-700`}
+                            onClick={() => setActiveView(item.id as View)}
+                            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left font-semibold transition-colors ${
+                                activeView === item.id 
+                                ? 'bg-blue-50 text-blue-700' 
+                                : 'text-gray-600 hover:bg-gray-100'
+                            }`}
                         >
                             <item.icon className="w-5 h-5" />
                             {item.label}
