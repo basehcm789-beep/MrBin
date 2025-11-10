@@ -1,9 +1,7 @@
 import React from 'react';
 import { Message } from '../types';
-import WorkLogTable from './WorkLogTable';
 import { UserIcon } from './icons/UserIcon';
 import { PaperAirplaneIcon } from './icons/PaperAirplaneIcon';
-import FlightTable from './FlightTable';
 import ManpowerTable from './ManpowerTable';
 
 interface ChatMessageProps {
@@ -26,16 +24,6 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
       {!isUser && icon}
       <div className={`rounded-lg p-4 max-w-lg lg:max-w-4xl ${bubbleClasses}`}>
         <p className="whitespace-pre-wrap">{message.text}</p>
-        {message.worklogs && message.worklogs.length > 0 && (
-          <div className="mt-4">
-            <WorkLogTable worklogs={message.worklogs} />
-          </div>
-        )}
-        {message.flights && message.flights.length > 0 && (
-          <div className="mt-4">
-            <FlightTable flights={message.flights} />
-          </div>
-        )}
         {message.zoneManpower && message.zoneManpower.length > 0 && (
             <div className="mt-4">
                 <ManpowerTable data={message.zoneManpower} />

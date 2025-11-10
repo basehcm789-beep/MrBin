@@ -6,12 +6,9 @@ import ExampleQueries from './ExampleQueries';
 interface ChatWindowProps {
   messages: Message[];
   isLoading: boolean;
-  onExampleQueryClick: (query: string) => void;
-  isDataMode: boolean;
-  dataType: 'worklog' | 'flight' | 'manpower' | null;
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ messages, isLoading, onExampleQueryClick, isDataMode, dataType }) => {
+const ChatWindow: React.FC<ChatWindowProps> = ({ messages, isLoading }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -25,7 +22,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ messages, isLoading, onExampleQ
   return (
     <main className="flex-1 overflow-y-auto p-4 md:p-6">
       <div className="max-w-4xl mx-auto space-y-6">
-        {messages.length === 0 && !isLoading && <ExampleQueries onQueryClick={onExampleQueryClick} isDataMode={isDataMode} dataType={dataType} />}
+        {messages.length === 0 && !isLoading && <ExampleQueries />}
         {messages.map((msg) => (
           <ChatMessage key={msg.id} message={msg} />
         ))}

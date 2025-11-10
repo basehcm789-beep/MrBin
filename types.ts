@@ -1,51 +1,3 @@
-export interface Task {
-  id: string;
-  description: string;
-  isCompleted: boolean;
-}
-
-export interface WorkPack {
-  id: string;
-  title: string;
-  description: string;
-  aircraftType: string;
-  createdBy: string;
-  dateCreated: string;
-  status: 'Pending Review' | 'Approved' | 'Rejected';
-  tasks: Task[];
-}
-
-export interface WorkPackEvaluationResponse {
-  summary: string;
-  overallScore: number;
-  positivePoints: string[];
-  areasForImprovement: string[];
-  suggestedModifications: string[];
-  safetyConcerns: string[];
-}
-
-// FIX: Added missing type definitions for WorkLog, Flight, Message, and ActiveFilters.
-export interface WorkLog {
-  Date: string;
-  AircraftType: string;
-  Airport: string;
-  WorkType: string;
-  Flights: number;
-  ManHours: number;
-  FileName?: string;
-}
-
-export interface Flight {
-  airline: string;
-  flightNumber: string;
-  origin: string;
-  destination: string;
-  departureTime: string;
-  arrivalTime: string;
-  duration: string;
-  stops: number;
-  price: number;
-}
 
 export interface ZoneManpower {
   zone: string;
@@ -60,15 +12,7 @@ export interface Message {
   sender: 'user' | 'ai';
   text: string;
   isError?: boolean;
-  worklogs?: WorkLog[];
-  flights?: Flight[];
   zoneManpower?: ZoneManpower[];
-}
-
-export interface ActiveFilters {
-  maxPrice: number;
-  stops: number[];
-  airlines: string[];
 }
 
 /**
@@ -90,4 +34,59 @@ export interface ManpowerTask {
 export interface ManpowerCalculationResponse {
   summary: string;
   zoneManpower: ZoneManpower[];
+}
+
+// FIX: Added missing type definitions.
+export interface Flight {
+  airline: string;
+  flightNumber: string;
+  origin: string;
+  departureTime: string;
+  destination: string;
+  arrivalTime: string;
+  duration: string;
+  stops: number;
+  price: number;
+}
+
+export interface WorkLog {
+  Date: string;
+  AircraftType: string;
+  Airport: string;
+  WorkType: string;
+  Flights: number;
+  ManHours: number;
+  FileName?: string;
+}
+
+export interface ActiveFilters {
+  maxPrice: number;
+  stops: number[];
+  airlines: string[];
+}
+
+export interface WorkPackTask {
+    id: string;
+    description: string;
+    isCompleted: boolean;
+}
+
+export interface WorkPack {
+    id: string;
+    title: string;
+    description: string;
+    aircraftType: string;
+    createdBy: string;
+    dateCreated: string;
+    status: 'Pending Review' | 'Approved' | 'Rejected';
+    tasks: WorkPackTask[];
+}
+
+export interface WorkPackEvaluationResponse {
+    overallScore: number;
+    summary: string;
+    positivePoints: string[];
+    areasForImprovement: string[];
+    suggestedModifications: string[];
+    safetyConcerns: string[];
 }

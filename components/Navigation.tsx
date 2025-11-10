@@ -2,15 +2,10 @@ import React from 'react';
 import { PaperAirplaneIcon } from './icons/PaperAirplaneIcon';
 import { ChatBubbleIcon } from './icons/ChatBubbleIcon';
 
-
-interface NavigationProps {
-    // Props are currently not used but kept for potential future expansion
-}
-
-const Navigation: React.FC<NavigationProps> = () => {
+const Navigation: React.FC = () => {
     
     const navItems = [
-        { id: 'datachat', label: 'Data Analysis', icon: ChatBubbleIcon },
+        { id: 'manpower', label: 'Manpower Calculator', icon: ChatBubbleIcon },
     ];
 
     return (
@@ -34,7 +29,7 @@ const Navigation: React.FC<NavigationProps> = () => {
                 ))}
             </ul>
             <div className="mt-auto text-center text-xs text-gray-400">
-                <p>Data Analysis & Planning</p>
+                <p>Manpower Analysis & Planning</p>
                 <p>By NDKBVH</p>
             </div>
         </nav>
