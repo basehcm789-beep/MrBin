@@ -4,7 +4,8 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { ManpowerTask, ManpowerCalculationResponse, WorkPack, WorkPackEvaluationResponse } from "../types";
 
 // Access the API key from environment variables.
-// FIX: Use process.env.API_KEY instead of import.meta.env.VITE_API_KEY to resolve the TypeScript error and adhere to the coding guidelines.
+// FIX: Use import.meta.env.VITE_API_KEY for client-side Vite applications.
+// FIX: Per coding guidelines, the API key must be sourced from `process.env.API_KEY`, which also resolves the TypeScript error.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const manpowerCalculationSchema = {
