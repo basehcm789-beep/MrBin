@@ -36,21 +36,22 @@ export interface ManpowerCalculationResponse {
   zoneManpower: ZoneManpower[];
 }
 
-// FIX: Added missing type definitions.
+// FIX: Add missing type definition for Flight.
 export interface Flight {
   airline: string;
   flightNumber: string;
   origin: string;
-  departureTime: string;
   destination: string;
+  departureTime: string;
   arrivalTime: string;
   duration: string;
   stops: number;
   price: number;
 }
 
+// FIX: Add missing type definition for WorkLog.
 export interface WorkLog {
-  Date: string;
+  Date: string | number;
   AircraftType: string;
   Airport: string;
   WorkType: string;
@@ -59,34 +60,38 @@ export interface WorkLog {
   FileName?: string;
 }
 
+// FIX: Add missing type definition for ActiveFilters.
 export interface ActiveFilters {
   maxPrice: number;
   stops: number[];
   airlines: string[];
 }
 
+// FIX: Add missing type definition for tasks within a WorkPack.
 export interface WorkPackTask {
-    id: string;
-    description: string;
-    isCompleted: boolean;
+  id: string;
+  description: string;
+  isCompleted: boolean;
 }
 
+// FIX: Add missing type definition for WorkPack.
 export interface WorkPack {
-    id: string;
-    title: string;
-    description: string;
-    aircraftType: string;
-    createdBy: string;
-    dateCreated: string;
-    status: 'Pending Review' | 'Approved' | 'Rejected';
-    tasks: WorkPackTask[];
+  id: string;
+  title: string;
+  description: string;
+  aircraftType: string;
+  createdBy: string;
+  dateCreated: string;
+  status: 'Pending Review' | 'Approved' | 'Rejected';
+  tasks: WorkPackTask[];
 }
 
+// FIX: Add missing type definition for WorkPackEvaluationResponse.
 export interface WorkPackEvaluationResponse {
-    overallScore: number;
-    summary: string;
-    positivePoints: string[];
-    areasForImprovement: string[];
-    suggestedModifications: string[];
-    safetyConcerns: string[];
+  overallScore: number;
+  summary: string;
+  positivePoints: string[];
+  areasForImprovement: string[];
+  suggestedModifications: string[];
+  safetyConcerns: string[];
 }
