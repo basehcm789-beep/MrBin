@@ -7,16 +7,23 @@ interface WorkLogTableProps {
 
 const WorkLogTable: React.FC<WorkLogTableProps> = ({ worklogs }) => {
     
-    const formatDate = (dateString: string) => {
-        // Handle potential non-standard date formats from Excel
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) {
-            // Check for Excel's integer date format
-            if (typeof dateString === 'number' && dateString > 0) {
+    // FIX: Updated function signature to accept `string | number` and implemented logic to handle both types.
+    const formatDate = (dateString: string | number) => {
+        // Handle potential non-standard date formats from Excel.
+        // The value from the sheet can be a string or an Excel serial number.
+        if (typeof dateString === 'number') {
+            if (dateString > 0) {
+                 // Convert Excel serial number to JS Date
                  const excelEpoch = new Date(1899, 11, 30);
                  const correctDate = new Date(excelEpoch.getTime() + dateString * 24 * 60 * 60 * 1000);
                  if (!isNaN(correctDate.getTime())) return correctDate.toLocaleDateString();
             }
+            return String(dateString); // If not a valid Excel date number, return as string.
+        }
+
+        // Handle date as a string
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
             return dateString; // return original if parsing fails
         }
         return date.toLocaleDateString();
