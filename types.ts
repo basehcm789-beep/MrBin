@@ -1,4 +1,5 @@
 
+
 export interface ZoneManpower {
   zone: string;
   manpower: {
@@ -36,8 +37,9 @@ export interface ManpowerCalculationResponse {
   zoneManpower: ZoneManpower[];
 }
 
+// FIX: Added missing type definitions to resolve import errors.
 /**
- * Represents a single flight record.
+ * Represents a flight's data.
  */
 export interface Flight {
   airline: string;
@@ -52,7 +54,7 @@ export interface Flight {
 }
 
 /**
- * Represents a single work log entry from the Google Sheet.
+ * Represents a single row from the work log data.
  */
 export interface WorkLog {
   Date: string | number;
@@ -65,7 +67,7 @@ export interface WorkLog {
 }
 
 /**
- * Represents the state of active filters in the flight search UI.
+ * Represents the state of active filters for flight search.
  */
 export interface ActiveFilters {
   maxPrice: number;
@@ -74,36 +76,31 @@ export interface ActiveFilters {
 }
 
 /**
- * Represents a single task within a WorkPack.
- */
-export interface WorkPackTask {
-  id: string;
-  description: string;
-  isCompleted: boolean;
-}
-
-/**
  * Represents a maintenance work pack.
  */
 export interface WorkPack {
-  id: string;
-  title: string;
-  description: string;
-  aircraftType: string;
-  createdBy: string;
-  dateCreated: string;
-  status: 'Pending Review' | 'Approved' | 'Rejected';
-  tasks: WorkPackTask[];
+    id: string;
+    title: string;
+    description: string;
+    aircraftType: string;
+    createdBy: string;
+    dateCreated: string;
+    status: 'Pending Review' | 'Approved' | 'Rejected';
+    tasks: {
+        id: string;
+        description: string;
+        isCompleted: boolean;
+    }[];
 }
 
 /**
  * Represents the structured response from Gemini for work pack evaluation.
  */
 export interface WorkPackEvaluationResponse {
-  summary: string;
-  overallScore: number;
-  positivePoints: string[];
-  areasForImprovement: string[];
-  suggestedModifications: string[];
-  safetyConcerns: string[];
+    overallScore: number;
+    summary: string;
+    positivePoints: string[];
+    areasForImprovement: string[];
+    suggestedModifications: string[];
+    safetyConcerns: string[];
 }
