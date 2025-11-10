@@ -36,7 +36,9 @@ export interface ManpowerCalculationResponse {
   zoneManpower: ZoneManpower[];
 }
 
-// FIX: Add missing type definition for Flight.
+/**
+ * Represents a single flight record.
+ */
 export interface Flight {
   airline: string;
   flightNumber: string;
@@ -49,7 +51,9 @@ export interface Flight {
   price: number;
 }
 
-// FIX: Add missing type definition for WorkLog.
+/**
+ * Represents a single work log entry from the Google Sheet.
+ */
 export interface WorkLog {
   Date: string | number;
   AircraftType: string;
@@ -60,21 +64,27 @@ export interface WorkLog {
   FileName?: string;
 }
 
-// FIX: Add missing type definition for ActiveFilters.
+/**
+ * Represents the state of active filters in the flight search UI.
+ */
 export interface ActiveFilters {
   maxPrice: number;
   stops: number[];
   airlines: string[];
 }
 
-// FIX: Add missing type definition for tasks within a WorkPack.
+/**
+ * Represents a single task within a WorkPack.
+ */
 export interface WorkPackTask {
   id: string;
   description: string;
   isCompleted: boolean;
 }
 
-// FIX: Add missing type definition for WorkPack.
+/**
+ * Represents a maintenance work pack.
+ */
 export interface WorkPack {
   id: string;
   title: string;
@@ -86,10 +96,12 @@ export interface WorkPack {
   tasks: WorkPackTask[];
 }
 
-// FIX: Add missing type definition for WorkPackEvaluationResponse.
+/**
+ * Represents the structured response from Gemini for work pack evaluation.
+ */
 export interface WorkPackEvaluationResponse {
-  overallScore: number;
   summary: string;
+  overallScore: number;
   positivePoints: string[];
   areasForImprovement: string[];
   suggestedModifications: string[];

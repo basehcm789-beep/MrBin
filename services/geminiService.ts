@@ -1,9 +1,10 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
+// FIX: Added imports for WorkPack and WorkPackEvaluationResponse to support the new evaluation function.
 import { ManpowerTask, ManpowerCalculationResponse, WorkPack, WorkPackEvaluationResponse } from "../types";
 
-// Access the API key from environment variables.
-// FIX: Use process.env.API_KEY as per the coding guidelines.
+// Access the API key from environment variables for Vite.
+// FIX: Changed API key source from import.meta.env.VITE_API_KEY to process.env.API_KEY to align with coding guidelines.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const manpowerCalculationSchema = {
@@ -106,59 +107,65 @@ export const calculateManpower = async (tasks: ManpowerTask[], fileName: string)
     }
 };
 
-// FIX: Add missing evaluateWorkPack function.
-export const evaluateWorkPack = async (workPack: WorkPack): Promise<WorkPackEvaluationResponse> => {
-    const evaluationSchema = {
-        type: Type.OBJECT,
-        properties: {
-            overallScore: {
-                type: Type.INTEGER,
-                description: 'An overall score from 1 to 10 evaluating the quality, clarity, and safety of the work pack. 1 is poor, 10 is excellent.'
-            },
-            summary: {
-                type: Type.STRING,
-                description: 'A brief, one-sentence summary of the evaluation.'
-            },
-            positivePoints: {
-                type: Type.ARRAY,
-                description: 'A list of specific positive aspects of the work pack.',
-                items: { type: Type.STRING }
-            },
-            areasForImprovement: {
-                type: Type.ARRAY,
-                description: 'A list of constructive suggestions for improving the work pack.',
-                items: { type: Type.STRING }
-            },
-            suggestedModifications: {
-                type: Type.ARRAY,
-                description: 'A list of concrete changes to be made to the tasks for clarity or safety.',
-                items: { type: Type.STRING }
-            },
-            safetyConcerns: {
-                type: Type.ARRAY,
-                description: 'A list of any potential safety issues or ambiguities identified in the tasks.',
-                items: { type: Type.STRING }
-            }
+// FIX: Added schema for the work pack evaluation response.
+const workPackEvaluationSchema = {
+    type: Type.OBJECT,
+    properties: {
+        summary: {
+            type: Type.STRING,
+            description: 'A brief, one-sentence summary of the evaluation.'
         },
-        required: ['overallScore', 'summary', 'positivePoints', 'areasForImprovement', 'suggestedModifications', 'safetyConcerns']
-    };
+        overallScore: {
+            type: Type.INTEGER,
+            description: 'An overall score from 1 to 10 for the work pack quality.'
+        },
+        positivePoints: {
+            type: Type.ARRAY,
+            description: 'A list of specific positive aspects of the work pack.',
+            items: { type: Type.STRING }
+        },
+        areasForImprovement: {
+            type: Type.ARRAY,
+            description: 'A list of areas where the work pack could be improved.',
+            items: { type: Type.STRING }
+        },
+        suggestedModifications: {
+            type: Type.ARRAY,
+            description: 'A list of specific, actionable modifications to improve the tasks or description.',
+            items: { type: Type.STRING }
+        },
+        safetyConcerns: {
+            type: Type.ARRAY,
+            description: 'A list of any potential safety concerns or missing safety steps.',
+            items: { type: Type.STRING }
+        }
+    },
+    required: ['summary', 'overallScore', 'positivePoints', 'areasForImprovement', 'suggestedModifications', 'safetyConcerns']
+};
 
+// FIX: Implemented the missing evaluateWorkPack function to handle AI-based evaluation of maintenance work packs.
+export const evaluateWorkPack = async (workPack: WorkPack): Promise<WorkPackEvaluationResponse> => {
     const prompt = `
-        You are an expert aviation maintenance supervisor and safety officer. Your task is to evaluate the provided maintenance work pack for an ${workPack.aircraftType}.
-        Analyze the work pack's title, description, and list of tasks for clarity, completeness, technical accuracy, and potential safety risks.
+        You are an expert aviation maintenance supervisor and safety inspector. Your task is to thoroughly evaluate the following maintenance work pack.
 
-        Here is the work pack data:
+        Work Pack Data:
         \`\`\`json
         ${JSON.stringify(workPack, null, 2)}
         \`\`\`
 
-        Follow these evaluation criteria:
-        1.  **Clarity and Specificity**: Are the tasks clearly described? Are they actionable and unambiguous for a qualified technician?
-        2.  **Completeness**: Does the work pack seem to include all necessary steps? For example, does a replacement task include steps for safety precautions, removal, installation, and testing?
-        3.  **Safety**: Are there any potential safety hazards? Are warnings or precautions missing? (e.g., "depressurize hydraulic system before disconnecting lines", "disconnect battery before electrical work").
-        4.  **Technical Accuracy**: Do the tasks seem technically sound for the described job on this aircraft type?
+        Please perform a comprehensive evaluation based on the following criteria:
+        1.  **Clarity and Specificity**: Are the title, description, and tasks clear, specific, and unambiguous?
+        2.  **Completeness**: Does the work pack seem to include all necessary steps for the described job? Are there any obvious omissions?
+        3.  **Safety**: Are there any potential safety risks? Are critical safety steps (like power-off, depressurization, etc.) explicitly mentioned or implied where necessary?
+        4.  **Best Practices**: Does the work pack follow standard aviation maintenance practices?
 
-        Based on your analysis, provide a structured evaluation in the specified JSON format. The score should reflect your overall confidence in this work pack being ready for execution.
+        Based on your evaluation, provide the following in the specified JSON format:
+        -   **summary**: A concise, one or two-sentence summary of your findings.
+        -   **overallScore**: A score from 1 (very poor) to 10 (excellent).
+        -   **positivePoints**: Specific things that are done well in the work pack.
+        -   **areasForImprovement**: General areas where the work pack is lacking.
+        -   **suggestedModifications**: Concrete, actionable suggestions for changing or adding tasks to improve the work pack.
+        -   **safetyConcerns**: A list of any identified safety issues or missing precautions. If none, return an empty array.
     `;
 
     try {
@@ -167,7 +174,7 @@ export const evaluateWorkPack = async (workPack: WorkPack): Promise<WorkPackEval
             contents: prompt,
             config: {
                 responseMimeType: 'application/json',
-                responseSchema: evaluationSchema,
+                responseSchema: workPackEvaluationSchema,
             },
         });
 
@@ -176,12 +183,12 @@ export const evaluateWorkPack = async (workPack: WorkPack): Promise<WorkPackEval
     } catch (error) {
         console.error('Error evaluating work pack with Gemini:', error);
         return {
-            overallScore: 1,
-            summary: "An error occurred during AI evaluation. Please try again.",
+            summary: "An error occurred during AI evaluation. The work pack could not be analyzed.",
+            overallScore: 0,
             positivePoints: [],
-            areasForImprovement: [],
+            areasForImprovement: ["The AI model failed to process the request."],
             suggestedModifications: [],
-            safetyConcerns: ["The AI model failed to process the request."],
+            safetyConcerns: ["Unable to perform safety analysis due to a technical error."]
         };
     }
 };
