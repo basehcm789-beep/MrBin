@@ -17,7 +17,7 @@ Follow these steps to run the application on your local machine.
 
 ### Prerequisites
 
--   [Node.js](https://nodejs.org/) (LTS version recommended)
+-   [Node.js](https://nodejs.org/) (v20.x recommended)
 -   `npm` (comes with Node.js)
 -   A Google Gemini API Key.
 
@@ -36,9 +36,9 @@ Follow these steps to run the application on your local machine.
     ```
 
 3.  **Set up environment variables:**
-    Create a new file named `.env` in the root of the project. Copy the contents of `.env.example` into it and add your Gemini API key.
+    Create a new file named `.env` in the root of the project and add your Gemini API key.
     ```
-    VITE_API_KEY=YOUR_GEMINI_API_KEY_HERE
+    API_KEY=YOUR_GEMINI_API_KEY_HERE
     ```
 
 4.  **Start the development server:**
@@ -69,7 +69,7 @@ This project is configured for easy deployment on Vercel.
 4.  **Add Environment Variable:**
     -   Before deploying, navigate to the project's **Settings** -> **Environment Variables**.
     -   Add a new variable:
-        -   **Name**: `VITE_API_KEY`
+        -   **Name**: `API_KEY`
         -   **Value**: Paste your Gemini API key here.
     -   Ensure the variable is available for all environments (Production, Preview, Development).
 

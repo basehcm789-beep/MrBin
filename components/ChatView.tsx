@@ -37,14 +37,15 @@ const ChatView: React.FC = () => {
             const originalTasks = json as ManpowerTask[];
             
             // Process tasks: if 'MAC hour' is missing or falsy, set it to 0.009
+            // To scale the project duration from 5 days to 20 days, the previous man-hour
+            // multiplier (40/3) is multiplied by 4, resulting in a new multiplier of 160/3.
             const processedTasks = originalTasks.map(task => {
-                if (!task['MAC hour']) {
-                    return {
-                        ...task,
-                        'MAC hour': 0.009
-                    };
-                }
-                return task;
+                const macHour = task['MAC hour'] ? Number(task['MAC hour']) : 0.009;
+                const updatedMacHour = macHour * (160 / 3);
+                return {
+                    ...task,
+                    'MAC hour': updatedMacHour
+                };
             });
 
             const response = await calculateManpower(processedTasks, file.name);
